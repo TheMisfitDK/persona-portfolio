@@ -127,7 +127,7 @@
           <span class="repo-card__stars" data-hover="★ ${r.stargazers_count}">★ ${r.stargazers_count}</span>
           <span class="repo-card__forks" data-hover="⑂ ${r.forks_count}">⑂ ${r.forks_count}</span>
         </div>
-        <a class="repo-card__link" href="${r.url}" target="_blank" rel="noopener noreferrer">VIEW SOURCE ▸</a>
+        <a class="repo-card__link" href="${r.html_url}" target="_blank" rel="noopener noreferrer">VIEW SOURCE ▸</a>
       </article>
     `).join("");
 
