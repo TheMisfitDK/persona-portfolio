@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="phantom-red">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A kinetic, Persona 5-inspired developer portfolio template." />
+  <title>PHANTOM // PORTFOLIO</title>
+
+  <!-- Favicon placeholder -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎭</text></svg>" />
+
+  <!-- Google Fonts: Slant (display) + Oswald (headings) + Inter (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Slant:regular&family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- CUSTOM CURSOR (desktop only, removed via JS on touch devices) -->
+  <div class="cursor" id="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__ring"></div>
+    <div class="cursor__label"></div>
+  </div>
+
+  <!-- TAP BURST LAYER (mobile only) -->
+  <div class="tap-layer" id="tapLayer" aria-hidden="true"></div>
+
+  <!-- THEME SWITCHER -->
+  <nav class="theme-switch" id="themeSwitch" aria-label="Accent color switcher">
+    <button class="theme-switch__btn" data-theme="phantom-red" title="Phantom Red"><span></span></button>
+    <button class="theme-switch__btn" data-theme="velvet-blue" title="Velvet Blue"><span></span></button>
+    <button class="theme-switch__btn" data-theme="joker-green" title="Joker Green"><span></span></button>
+    <button class="theme-switch__btn" data-theme="oracle-orange" title="Oracle Orange"><span></span></button>
+  </nav>
+
+  <!-- TOP HUD STRIP -->
+  <header class="hud">
+    <span class="hud__tag">P5 // PORTFOLIO v1.0</span>
+    <span class="hud__tag hud__tag--right" id="hudClock">--:--:--</span>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero__bg" aria-hidden="true">
+      <span class="hero__glitch">TAKE YOUR HEART</span>
+    </div>
+    <div class="hero__content">
+      <div class="hero__avatar-wrap reveal">
+        <div class="hero__avatar-frame">
+          <img class="hero__avatar" id="heroAvatar" src="" alt="Profile avatar" />
+        </div>
+      </div>
+      <div class="hero__text reveal">
+        <p class="hero__eyebrow">I AM</p>
+        <h1 class="hero__name" id="heroName">DEEPAK KUMAR</h1>
+        <p class="hero__tagline" id="heroTagline"></p>
+        <p class="hero__bio" id="heroBio"></p>
+        <div class="hero__socials" id="heroSocials"></div>
+      </div>
+    </div>
+    <div class="hero__scroll-hint" aria-hidden="true">SCROLL ▼</div>
+  </section>
+
+  <!-- HERO STATS STRIP -->
+  <section class="stats-strip" id="statsStrip" aria-label="GitHub stats">
+    <div class="stat reveal">
+      <span class="stat__num" id="statRepos">--</span>
+      <span class="stat__lbl">REPOS</span>
+    </div>
+    <div class="stat reveal">
+      <span class="stat__num" id="statFollowers">--</span>
+      <span class="stat__lbl">FOLLOWERS</span>
+    </div>
+    <div class="stat reveal">
+      <span class="stat__num" id="statFollowing">--</span>
+      <span class="stat__lbl">FOLLOWING</span>
+    </div>
+    <div class="stat reveal">
+      <span class="stat__num" id="statStars">--</span>
+      <span class="stat__lbl">STARS</span>
+    </div>
+    <div class="stat reveal" id="statCommitsWrap" hidden>
+      <span class="stat__num" id="statCommits">--</span>
+      <span class="stat__lbl">COMMITS</span>
+    </div>
+  </section>
+
+  <!-- PINNED REPOS -->
+  <section class="section" id="repos">
+    <div class="section__head reveal">
+      <h2 class="section__title">STOLEN // WORK</h2>
+      <p class="section__sub">Pinned treasures pulled straight from the Metaverse.</p>
+    </div>
+    <div class="repo-grid" id="repoGrid">
+      <p class="repo-grid__loading">Loading the loot…</p>
+    </div>
+  </section>
+
+  <!-- COMMIT ACTIVITY -->
+  <section class="section" id="commits" hidden>
+    <div class="section__head reveal">
+      <h2 class="section__title">NIGHTLY // HEIST</h2>
+      <p class="section__sub">Recent commit activity across powered-up repos.</p>
+    </div>
+    <div class="commit-chart" id="commitChart"></div>
+  </section>
+
+  <!-- CONTRIBUTION GRAPH -->
+  <section class="section" id="contrib" hidden>
+    <div class="section__head reveal">
+      <h2 class="section__title">CONFESSION // LOG</h2>
+      <p class="section__sub">A year of dexterity, captured one square at a time.</p>
+    </div>
+    <div class="contrib-graph" id="contribGraph"></div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="section__head reveal">
+      <h2 class="section__title">SEND A // CALLING CARD</h2>
+      <p class="section__sub">Got a target worth stealing? Let's talk.</p>
+    </div>
+    <div class="contact-card reveal" id="contactCard">
+      <a class="contact-card__mail" id="contactEmail" href="#">EMAIL</a>
+      <span class="contact-card__loc" id="contactLoc"></span>
+      <div class="contact-card__resume">
+        <a id="contactResume" href="#" hidden>VIEW RESUME ▸</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__socials" id="footerSocials"></div>
+    <p class="footer__copy">© <span id="year"></span> <span id="footerName"></span> // FORGED IN THE VELVET ROOM</p>
+    <p class="footer__credit">Persona Portfolio · <a href="https://github.com/TheMisfitDK/persona-portfolio" target="_blank" rel="noopener">Fork on GitHub</a></p>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/cursor.js"></script>
+  <script src="js/github.js"></script>
+  <script src="js/animations.js"></script>
+</body>
+</html>
