@@ -323,8 +323,13 @@ Permission is hereby granted...
 If this template helped you, consider:
 - ⭐ Starring the repo
 - 🐦 Sharing with a link back
-- ☕ [Buying me a coffee](https://buymeacoffee.com/TheMisfitDK) (optional)
 
----
+### Screenshots
+<img width="1332" height="593" alt="image" src="https://github.com/user-attachments/assets/ce126180-934c-41e3-874d-f8bc29402c03" />
+<img width="1270" height="386" alt="image" src="https://github.com/user-attachments/assets/a8de6675-645d-49d1-ada7-1bb9255095a7" />
+<img width="887" height="564" alt="image" src="https://github.com/user-attachments/assets/589707e4-3171-446d-aae5-597fafe7a70e" />
+
+
+
 
 **Made with 🎭 by [Deepak Kumar](https://github.com/TheMisfitDK) — Steal your face, not your code.**
