@@ -30,7 +30,7 @@
 ```bash
 # 1. Fork this repo (or click "Use this template")
 # 2. Clone your fork
-git clone https://github.com/<YOUR-USERNAME>/persona-portfolio.git
+git clone https://github.com/TheMisfitDK/persona-portfolio.git
 cd persona-portfolio
 
 # 3. Edit your config
