@@ -138,9 +138,8 @@
   // Uses /repos/{owner}/{repo}/stats/commit_activity — 60 req/hr unauth.
   // We only fetch for top 6 pinned repos to stay under limit.
 
-  async function fetchCommitActivityFallback() {
-    const pinnedData = await fetchPinned();
-    const repos = pinnedData.pinned?.slice(0, 6) || [];
+  async function fetchCommitActivityFallback(pinnedRepos) {
+    const repos = (pinnedRepos || (await fetchPinned()).pinned)?.slice(0, 6) || [];
     const bars = [];
 
     for (const r of repos) {

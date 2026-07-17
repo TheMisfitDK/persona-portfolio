@@ -95,6 +95,12 @@
     document.getElementById("contactEmail").href = `mailto:${c.email}`;
     document.getElementById("contactEmail").textContent = c.email;
     document.getElementById("contactLoc").textContent = c.location || "";
+    if (c.available) {
+      const badge = document.createElement("span");
+      badge.className = "contact-card__badge";
+      badge.textContent = "AVAILABLE // FOR WORK";
+      document.getElementById("contactCard").appendChild(badge);
+    }
     if (c.resumeUrl) {
       document.getElementById("contactResume").href = c.resumeUrl;
       document.getElementById("contactResume").hidden = false;
@@ -117,9 +123,9 @@
         </div>
         <p class="repo-card__desc">${r.description || "No description."}</p>
         <div class="repo-card__meta">
-          ${r.topics?.slice(0, 3).map(t => `<span class="repo-card__tag">${t}</span>`).join("") || ""}
-          <span class="repo-card__stars" data-hover="★ ${r.stars}">★ ${r.stars}</span>
-          <span class="repo-card__forks" data-hover="⑂ ${r.forks}">⑂ ${r.forks}</span>
+          ${r.topics?.slice(0, 3).map(t => `<span class="repo-card__topic">${t}</span>`).join("") || ""}
+          <span class="repo-card__stars" data-hover="★ ${r.stargazers_count}">★ ${r.stargazers_count}</span>
+          <span class="repo-card__forks" data-hover="⑂ ${r.forks_count}">⑂ ${r.forks_count}</span>
         </div>
         <a class="repo-card__link" href="${r.url}" target="_blank" rel="noopener noreferrer">VIEW SOURCE ▸</a>
       </article>
@@ -170,17 +176,115 @@
         ${weeks.map(w => `
           <div class="contrib-graph__col">
             ${w.contributionDays.map(d => `
-              <div class="contrib-day reveal" style="--lvl:${Math.min(4, Math.ceil((d.contributionCount/max)*4))}" data-date="${d.date}" data-count="${d.contributionCount}" data-hover="${d.contributionCount} contributions on ${d.date}"></div>
+              <div class="contrib-day reveal" data-lvl="${Math.min(4, Math.ceil((d.contributionCount/max)*4))}" data-date="${d.date}" data-count="${d.contributionCount}" data-hover="${d.contributionCount} contributions on ${d.date}"></div>
             `).join("")}
           </div>
         `).join("")}
       </div>
     `;
     wrap.querySelectorAll(".contrib-day").forEach((el, i) => {
-      el.style.transitionDelay = `${(i % 52) * 0.005}s`;
+      const col = Math.floor(i / 7);
+      const row = i % 7;
+      el.style.transitionDelay = `${row * 0.02 + col * 0.003}s`;
       revealObserver.observe(el);
     });
     document.getElementById("contrib").hidden = false;
+  }
+
+  /* ---------- SKILLS ---------- */
+  function renderSkills() {
+    const grid = document.getElementById("skillsGrid");
+    const skills = CFG?.skills;
+    if (!grid || !skills?.length) return;
+    grid.innerHTML = skills.map(s => `
+      <article class="skill-card reveal" tabindex="0">
+        <div class="skill-card__inner">
+          <div class="skill-card__head">
+            <span class="skill-card__icon">${s.icon || "▸"}</span>
+            <span class="skill-card__name">${s.name}</span>
+          </div>
+          <div class="skill-card__bar">
+            <div class="skill-card__bar-fill" style="--level:${s.level}%"></div>
+          </div>
+          <span class="skill-card__lvl">${s.level}%</span>
+        </div>
+      </article>
+    `).join("");
+    grid.querySelectorAll(".skill-card").forEach((el, i) => {
+      el.style.transitionDelay = `${i * 0.05}s`;
+      revealObserver.observe(el);
+    });
+  }
+
+  /* ---------- EXPERIENCE / TIMELINE ---------- */
+  function renderExperience() {
+    const wrap = document.getElementById("timeline");
+    const exp = CFG?.experience;
+    if (!wrap || !exp?.length) return;
+    wrap.innerHTML = exp.map((e, i) => `
+      <article class="timeline__item reveal" tabindex="0" style="transition-delay:${i * 0.1}s">
+        <div class="timeline__dot"></div>
+        <div class="timeline__role">${e.role}</div>
+        <div class="timeline__meta">
+          <span class="timeline__company">${e.company}</span>
+          <span class="timeline__period">${e.period}</span>
+        </div>
+        <p class="timeline__desc">${e.description}</p>
+      </article>
+    `).join("");
+    wrap.querySelectorAll(".timeline__item").forEach(el => revealObserver.observe(el));
+  }
+
+  /* ---------- FEATURED PROJECTS ---------- */
+  function renderProjects() {
+    const grid = document.getElementById("projectsGrid");
+    const projects = CFG?.featuredProjects;
+    if (!grid || !projects?.length) return;
+    grid.innerHTML = projects.map((p, i) => `
+      <article class="project-card reveal" tabindex="0" style="transition-delay:${i * 0.06}s">
+        <div class="project-card__inner">
+          <h3 class="project-card__name">${p.name}</h3>
+          <p class="project-card__desc">${p.description}</p>
+          ${p.techs?.length ? `<div class="project-card__techs">${p.techs.map(t => `<span class="project-card__tech">${t}</span>`).join("")}</div>` : ""}
+          <a class="project-card__link" href="${p.url}" target="_blank" rel="noopener noreferrer">VIEW ▸</a>
+        </div>
+      </article>
+    `).join("");
+    grid.querySelectorAll(".project-card").forEach(el => revealObserver.observe(el));
+  }
+
+  /* ---------- EDUCATION ---------- */
+  function renderEducation() {
+    const grid = document.getElementById("eduGrid");
+    const edu = CFG?.education;
+    if (!grid || !edu?.length) return;
+    grid.innerHTML = edu.map((e, i) => `
+      <article class="edu-card reveal" tabindex="0" style="transition-delay:${i * 0.08}s">
+        <div class="edu-card__inner">
+          <h3 class="edu-card__degree">${e.degree}</h3>
+          <p class="edu-card__institution">${e.institution}</p>
+          <p class="edu-card__year">${e.year}</p>
+        </div>
+      </article>
+    `).join("");
+    grid.querySelectorAll(".edu-card").forEach(el => revealObserver.observe(el));
+  }
+
+  /* ---------- TESTIMONIALS ---------- */
+  function renderTestimonials() {
+    const grid = document.getElementById("testimonialsGrid");
+    const testimonials = CFG?.testimonials;
+    if (!grid || !testimonials?.length) return;
+    grid.innerHTML = testimonials.map((t, i) => `
+      <article class="testimonial-card reveal" tabindex="0" style="transition-delay:${i * 0.07}s">
+        <div class="testimonial-card__inner">
+          <p class="testimonial-card__text">${t.quote}</p>
+          <p class="testimonial-card__author">${t.author}</p>
+          <p class="testimonial-card__role">${t.role}</p>
+        </div>
+      </article>
+    `).join("");
+    grid.querySelectorAll(".testimonial-card").forEach(el => revealObserver.observe(el));
   }
 
   /* ---------- THEME SWITCHER ---------- */
@@ -195,11 +299,13 @@
       html.dataset.theme = btn.dataset.theme;
       btns.forEach(b => b.classList.toggle("is-active", b === btn));
       localStorage.setItem("persona-theme", btn.dataset.theme);
+      document.body.classList.remove("theme-flash");
+      requestAnimationFrame(() => document.body.classList.add("theme-flash"));
     }));
 
-    // persist
+    // persist — localStorage always wins over default
     const saved = localStorage.getItem("persona-theme");
-    if (saved && !CFG?.defaultTheme) {
+    if (saved) {
       html.dataset.theme = saved;
       btns.forEach(b => b.classList.toggle("is-active", b.dataset.theme === saved));
     }
@@ -219,22 +325,34 @@
       // augment profile with stars + commits
       const repos = await window.GITHUB_API.fetchRepos();
       profile.totalStars = window.GITHUB_API.totalStars(repos);
-      profile.totalCommits = pinnedData?.commits || null;
+      profile.totalCommits = pinnedData?.calendar?.totalContributions || null;
 
       fillHero(profile);
 
       if (FEATS.pinnedRepos && pinnedData?.pinned) renderRepos(pinnedData.pinned);
-      if (FEATS.commitStats && !pinnedData?.commits) {
-        const bars = await window.GITHUB_API.fetchCommitActivityFallback();
+      if (FEATS.commitStats) {
+        const bars = await window.GITHUB_API.fetchCommitActivityFallback(pinnedData?.pinned);
         renderCommitChart(bars);
       }
       if (FEATS.contributionGraph && pinnedData?.calendar) renderContribGraph(pinnedData.calendar);
+
+      renderSkills();
+      renderExperience();
+      renderProjects();
+      renderEducation();
+      renderTestimonials();
 
     } catch (e) {
       console.error("[persona-portfolio] GitHub fetch failed:", e);
       // graceful fallback: still show hero with config name
       fillHero({ login: CFG.githubUsername, name: CFG.name, avatar_url: "", bio: "", public_repos: "--", followers: "--", following: "--" });
       document.getElementById("repoGrid").innerHTML = `<p class="repo-grid__error">Could not fetch GitHub data. Set CONFIG.githubToken for higher rate limit.</p>`;
+      // local sections still render
+      renderSkills();
+      renderExperience();
+      renderProjects();
+      renderEducation();
+      renderTestimonials();
     }
   }
 

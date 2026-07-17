@@ -9,18 +9,38 @@
   <!-- Favicon placeholder -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎭</text></svg>" />
 
-  <!-- Google Fonts: Slant (display) + Oswald (headings) + Inter (body) -->
+  <!-- P5 Menu Font (Persona 5 Royal-style) + Oswald (headings) + Inter (body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Slant:regular&family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600;900&display=swap" rel="stylesheet" />
+  <link href="https://db.onlinewebfonts.com/c/0f892d006a9de06a6af78558ae7caed8?family=Persona+5+Menu+Font+Prototype" rel="stylesheet" />
 
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
+  <!-- SVG FILTERS (for blob goo effect) -->
+  <svg class="blob-svg" aria-hidden="true">
+    <defs>
+      <filter id="blobGoo">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9" result="goo" />
+        <feBlend in="SourceGraphic" in2="goo" />
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- WOBBLY BLOBS BACKGROUND -->
+  <div class="blob-container" aria-hidden="true">
+    <div class="blob blob--1"></div>
+    <div class="blob blob--2"></div>
+    <div class="blob blob--3"></div>
+    <div class="blob blob--4"></div>
+  </div>
+
   <!-- CUSTOM CURSOR (desktop only, removed via JS on touch devices) -->
   <div class="cursor" id="cursor" aria-hidden="true">
+    <div class="cursor__diamond"></div>
     <div class="cursor__dot"></div>
-    <div class="cursor__ring"></div>
     <div class="cursor__label"></div>
   </div>
 
@@ -90,8 +110,8 @@
   <!-- PINNED REPOS -->
   <section class="section" id="repos">
     <div class="section__head reveal">
-      <h2 class="section__title">STOLEN // WORK</h2>
-      <p class="section__sub">Pinned treasures pulled straight from the Metaverse.</p>
+      <h2 class="section__title">PINNED // REPOSITORIES</h2>
+      <p class="section__sub">Highlighted projects from my GitHub profile.</p>
     </div>
     <div class="repo-grid" id="repoGrid">
       <p class="repo-grid__loading">Loading the loot…</p>
@@ -101,8 +121,8 @@
   <!-- COMMIT ACTIVITY -->
   <section class="section" id="commits" hidden>
     <div class="section__head reveal">
-      <h2 class="section__title">NIGHTLY // HEIST</h2>
-      <p class="section__sub">Recent commit activity across powered-up repos.</p>
+      <h2 class="section__title">COMMIT // ACTIVITY</h2>
+      <p class="section__sub">Recent commit history across repositories.</p>
     </div>
     <div class="commit-chart" id="commitChart"></div>
   </section>
@@ -110,17 +130,62 @@
   <!-- CONTRIBUTION GRAPH -->
   <section class="section" id="contrib" hidden>
     <div class="section__head reveal">
-      <h2 class="section__title">CONFESSION // LOG</h2>
-      <p class="section__sub">A year of dexterity, captured one square at a time.</p>
+      <h2 class="section__title">CONTRIBUTION // GRAPH</h2>
+      <p class="section__sub">A year of GitHub contributions at a glance.</p>
     </div>
     <div class="contrib-graph" id="contribGraph"></div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="section" id="skills">
+    <div class="section__head reveal">
+      <h2 class="section__title">SKILLS // TOOLKIT</h2>
+      <p class="section__sub">Technologies and tools I work with.</p>
+    </div>
+    <div class="skills-grid" id="skillsGrid"></div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="section" id="experience">
+    <div class="section__head reveal">
+      <h2 class="section__title">EXPERIENCE // TIMELINE</h2>
+      <p class="section__sub">My professional journey and work history.</p>
+    </div>
+    <div class="timeline" id="timeline"></div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="section" id="projects">
+    <div class="section__head reveal">
+      <h2 class="section__title">FEATURED // PROJECTS</h2>
+      <p class="section__sub">Notable projects I've built and contributed to.</p>
+    </div>
+    <div class="projects-grid" id="projectsGrid"></div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="section" id="education">
+    <div class="section__head reveal">
+      <h2 class="section__title">EDUCATION // CERTIFICATION</h2>
+      <p class="section__sub">Academic background and professional training.</p>
+    </div>
+    <div class="edu-grid" id="eduGrid"></div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section" id="testimonials">
+    <div class="section__head reveal">
+      <h2 class="section__title">TESTIMONIALS // PRAISE</h2>
+      <p class="section__sub">What colleagues and collaborators have to say.</p>
+    </div>
+    <div class="testimonials-grid" id="testimonialsGrid"></div>
   </section>
 
   <!-- CONTACT -->
   <section class="section" id="contact">
     <div class="section__head reveal">
-      <h2 class="section__title">SEND A // CALLING CARD</h2>
-      <p class="section__sub">Got a target worth stealing? Let's talk.</p>
+      <h2 class="section__title">GET IN // TOUCH</h2>
+      <p class="section__sub">Have a project in mind? Let's connect.</p>
     </div>
     <div class="contact-card reveal" id="contactCard">
       <a class="contact-card__mail" id="contactEmail" href="#">EMAIL</a>
@@ -140,6 +205,7 @@
 
   <script src="js/config.js"></script>
   <script src="js/cursor.js"></script>
+  <script src="js/blobs.js"></script>
   <script src="js/github.js"></script>
   <script src="js/animations.js"></script>
 </body>

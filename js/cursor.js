@@ -1,7 +1,3 @@
-/* ====================================================================
-   PERSONA PORTFOLIO — CUSTOM CURSOR & TAP BURST
-   ==================================================================== */
-
 (() => {
   "use strict";
 
@@ -11,41 +7,35 @@
   const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
   if (!FEATS.customCursor && !FEATS.tapEffect) return;
-  if (prefersReduced) return; // respect user motion preference
+  if (prefersReduced) return;
 
-  /* ---------- DESKTOP: CUSTOM CURSOR ---------- */
+  /* ---------- DESKTOP: BLACK DIAMOND CURSOR ---------- */
   if (!isTouch && FEATS.customCursor) {
     const cursor = document.getElementById("cursor");
+    const diamond = cursor?.querySelector(".cursor__diamond");
     const dot = cursor?.querySelector(".cursor__dot");
-    const ring = cursor?.querySelector(".cursor__ring");
     const label = cursor?.querySelector(".cursor__label");
 
-    if (!cursor) return;
+    if (!cursor || !diamond) return;
 
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;
-    let dotX = mouseX;
-    let dotY = mouseY;
-    let ringX = mouseX;
-    let ringY = mouseY;
-    let isHover = false;
-    let isDown = false;
+    let curX = mouseX;
+    let curY = mouseY;
     let currentLabel = "";
     let rafId = null;
 
     function lerp(a, b, t) { return a + (b - a) * t; }
 
     function tick() {
-      dotX = lerp(dotX, mouseX, 0.35);
-      dotY = lerp(dotY, mouseY, 0.35);
-      ringX = lerp(ringX, mouseX, 0.18);
-      ringY = lerp(ringY, mouseY, 0.18);
-
+      curX = lerp(curX, mouseX, 0.2);
+      curY = lerp(curY, mouseY, 0.2);
+      diamond.style.transform = `translate(${curX}px, ${curY}px) translate(-50%, -50%) rotate(45deg)`;
       if (dot) {
-        dot.style.transform = `translate(${dotX}px, ${dotY}px) translate(-50%, -50%)`;
+        dot.style.transform = `translate(${curX}px, ${curY}px) translate(-50%, -50%)`;
       }
-      if (ring) {
-        ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)${isHover ? " rotate(45deg)" : ""}`;
+      if (label) {
+        label.style.transform = `translate(${curX + 18}px, ${curY - 18}px)`;
       }
       rafId = requestAnimationFrame(tick);
     }
@@ -56,28 +46,16 @@
       if (!rafId) tick();
     });
 
-    document.addEventListener("mousedown", () => {
-      isDown = true;
-      cursor.classList.add("is-down");
-    });
-    document.addEventListener("mouseup", () => {
-      isDown = false;
-      cursor.classList.remove("is-down");
-    });
+    document.addEventListener("mousedown", () => cursor.classList.add("is-down"));
+    document.addEventListener("mouseup", () => cursor.classList.remove("is-down"));
 
-    // hover targets
     const HOVER_SELECTOR = "a, button, .repo-card, .commit-bar, .contrib-day, .theme-switch__btn, .contact-card__mail, .contact-card__resume a, .hero__socials a, .footer__socials a";
-
-    let hoverTarget = null;
 
     document.addEventListener("mouseover", e => {
       const target = e.target.closest(HOVER_SELECTOR);
       if (!target) return;
-      hoverTarget = target;
-      isHover = true;
       cursor.classList.add("is-hover");
 
-      // label from data-hover or text
       const txt = target.dataset.hover || target.getAttribute("aria-label") ||
                   (target.tagName === "A" ? target.textContent.trim().slice(0, 24) : "");
       if (txt && txt !== currentLabel) {
@@ -88,13 +66,10 @@
 
     document.addEventListener("mouseout", e => {
       if (!e.target.closest(HOVER_SELECTOR)) {
-        isHover = false;
         cursor.classList.remove("is-hover");
-        hoverTarget = null;
       }
     });
 
-    // reveal cursor after first move
     document.addEventListener("mousemove", () => {
       document.body.classList.add("has-cursor");
     }, { once: true });
@@ -119,9 +94,8 @@
       spawnBurst(t.clientX, t.clientY);
     }, { passive: true });
 
-    // also on click for desktop users with touch screens
     document.addEventListener("click", e => {
-      if (e.detail === 0) return; // programmatic
+      if (e.detail === 0) return;
       spawnBurst(e.clientX, e.clientY);
     });
   }
